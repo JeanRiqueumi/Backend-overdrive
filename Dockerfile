@@ -1,19 +1,16 @@
 # Estágio de Compilação
-FROM eclipse-temurin:25-jdk AS build
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copia todos os arquivos do projeto para o container
+# Copia os arquivos do projeto e compila usando o Maven que já vem instalado na imagem
 COPY . .
-
-# Executa o Maven Wrapper direto pelo Java (evita problemas com formatação do Windows)
-RUN java .mvn/wrapper/MavenWrapperDownloader.java || true
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Estágio de Execução
-FROM eclipse-temurin:25-jre
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# Copia o arquivo .jar gerado no estágio anterior
+# Copia o arquivo .jar gerado
 COPY --from=build /app/target/api-sample-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
