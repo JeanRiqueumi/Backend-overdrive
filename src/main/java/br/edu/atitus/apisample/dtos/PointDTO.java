@@ -1,17 +1,10 @@
 package br.edu.atitus.apisample.dtos;
 
-import java.math.BigDecimal;
-
-public record PointDTO(double latitude, double longitude, String description) {
-    public String getDescription() {
-    }
-
-    public Object getName() {
-    }
-
-    public BigDecimal getLatitude() {
-    }
-
-    public BigDecimal getLongitude() {
-    }
+public record PointDTO(
+        String name,
+        String description,
+        double latitude,
+        double longitude
+) {
+    // Como é um record, o Java cria os métodos de leitura automaticamente!
 }

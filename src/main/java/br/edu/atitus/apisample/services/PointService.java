@@ -6,6 +6,7 @@ import br.edu.atitus.apisample.entities.User;
 import br.edu.atitus.apisample.repositories.PointRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,23 +19,23 @@ public class PointService {
         this.pointRepository = pointRepository;
     }
 
-    // Regra: Salvar um novo ponto atrelando ao usuário logado
+    // Cria um novo ponto e vincula ao usuário logado
     public PointEntity save(PointDTO dto, User user) {
         PointEntity point = new PointEntity();
-        point.setName(dto.getName());
-        point.setDescription(dto.getDescription());
-        point.setLatitude(dto.getLatitude());
-        point.setLongitude(dto.getLongitude());
-        point.setUser(user); // Vincula o usuário logado
+        point.setName(dto.name());
+        point.setDescription(dto.description());
+        point.setLatitude(BigDecimal.valueOf(dto.latitude()));
+        point.setLongitude(BigDecimal.valueOf(dto.longitude()));
+        point.setUser(user);
         return pointRepository.save(point);
     }
 
-    // Regra obrigatória: Listar apenas pontos do usuário logado
+    // REQUISITO: Listar apenas pontos do usuário autenticado
     public List<PointEntity> findByConnectedUser(User user) {
         return pointRepository.findByUser(user);
     }
 
-    // Regra obrigatória: Atualização de Pontos (PUT) com validações
+    // REQUISITO: Atualização de Pontos (PUT) com regras obrigatórias
     public PointEntity update(UUID id, PointDTO dto, User user) throws Exception {
         // 1. Verificar se o ponto existe
         PointEntity point = pointRepository.findById(id)
@@ -45,11 +46,11 @@ public class PointService {
             throw new Exception("Acesso negado: Este ponto não pertence ao seu usuário.");
         }
 
-        // 3. Atualiza os dados com o mesmo DTO da criação
-        point.setName(dto.getName());
-        point.setDescription(dto.getDescription());
-        point.setLatitude(dto.getLatitude());
-        point.setLongitude(dto.getLongitude());
+        // 3. Atualiza os dados usando as propriedades corretas do record
+        point.setName(dto.name());
+        point.setDescription(dto.description());
+        point.setLatitude(BigDecimal.valueOf(dto.latitude()));
+        point.setLongitude(BigDecimal.valueOf(dto.longitude()));
 
         return pointRepository.save(point);
     }

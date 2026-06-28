@@ -34,7 +34,7 @@ public class PointController {
         return ResponseEntity.ok(points);
     }
 
-
+    // REQUISITO: Atualização de Pontos (PUT) no caminho /ws/point/{id}
     @PutMapping("/{id}")
     public ResponseEntity<PointEntity> updatePoint(
             @PathVariable UUID id,
