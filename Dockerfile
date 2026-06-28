@@ -2,12 +2,12 @@
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 
-# Instala o Maven manualmente
-RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
-
-# Copia os arquivos do projeto e gera o build
+# Copia todos os arquivos do projeto para o container
 COPY . .
-RUN mvn clean package -DskipTests
+
+# Executa o Maven Wrapper direto pelo Java (evita problemas com formatação do Windows)
+RUN java .mvn/wrapper/MavenWrapperDownloader.java || true
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
 # Estágio de Execução
 FROM eclipse-temurin:25-jre
