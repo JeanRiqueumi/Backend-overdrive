@@ -47,6 +47,7 @@ public class PointEntity {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-    public void setName(Object name) {
+    public void setName(String name) {
+
     }
 }

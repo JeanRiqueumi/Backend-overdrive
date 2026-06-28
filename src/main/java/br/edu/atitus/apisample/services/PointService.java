@@ -24,8 +24,11 @@ public class PointService {
         PointEntity point = new PointEntity();
         point.setName(dto.name());
         point.setDescription(dto.description());
+
+        // CORREÇÃO AQUI: Convertendo double para BigDecimal usando BigDecimal.valueOf()
         point.setLatitude(BigDecimal.valueOf(dto.latitude()));
         point.setLongitude(BigDecimal.valueOf(dto.longitude()));
+
         point.setUser(user);
         return pointRepository.save(point);
     }
@@ -46,7 +49,7 @@ public class PointService {
             throw new Exception("Acesso negado: Este ponto não pertence ao seu usuário.");
         }
 
-        // 3. Atualiza os dados usando as propriedades corretas do record
+        // 3. Atualiza os dados convertendo double para BigDecimal
         point.setName(dto.name());
         point.setDescription(dto.description());
         point.setLatitude(BigDecimal.valueOf(dto.latitude()));
