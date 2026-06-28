@@ -9,8 +9,9 @@ FROM eclipse-temurin:25-jre
 WORKDIR /app
 COPY --from=build /app/target/api-sample-0.0.1-SNAPSHOT.jar app.jar
 
-# Define a porta do Render
+# Define a porta exigida pelo Render
 ENV SERVER_PORT=${PORT:-8080}
+ENV PORT=${PORT:-8080}
 
-# Força a aplicação a usar um banco em memória temporário para ligar com sucesso
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.datasource.url=jdbc:h2:mem:testdb", "--spring.datasource.driver-class-name=org.h2.Driver", "--spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"]
+# Desativa totalmente a inicialização de qualquer banco de dados para a API ligar pura
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration"]
