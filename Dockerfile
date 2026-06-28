@@ -6,12 +6,14 @@ WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Estágio 2: Execução usando EXATAMENTE o mesmo Java 25
+# Estágio 2: Execução usando o mesmo Java 25
 FROM eclipse-temurin:25-jre
 WORKDIR /app
 
 # Copia o arquivo gerado
 COPY --from=build /app/target/api-sample-0.0.1-SNAPSHOT.jar app.jar
 
-EXPOSE 8080
+# Configura o Spring Boot para usar a porta dinâmica que o Render exige
+ENV SERVER_PORT=${PORT:-8080}
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
