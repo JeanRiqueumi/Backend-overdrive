@@ -1,6 +1,8 @@
 # Estágio de Compilação (Build)
-FROM maven:3.9.9-amazoncorretto-25 AS build
+FROM amazoncorretto:25-alpine AS build
 WORKDIR /app
+# Instala o bash que o mvnw precisa para rodar no Alpine Linux
+RUN apk add --no-cache bash
 COPY . .
 RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
